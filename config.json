@@ -1,79 +1,42 @@
 {
-  "_comment": "This is your control panel. Edit it directly in GitHub (pencil icon) to add feeds or keywords, commit, and the next run picks it up. Set a feed 'active' to false to mute it without deleting.",
+  "_comment": "Filter rules: require_any (must mention PhD/doctoral) + conditional_exclude (drop 'plant' only if no animal term). Edit feeds/keywords here, commit, then Actions -> Run workflow.",
+  "keywords_require_any": ["phd", "ph.d", "doctoral", "doctorate"],
   "keywords_include": [
-    "genomics",
-    "bioinformatics",
-    "animal breeding",
-    "quantitative genetics",
-    "genomic selection",
-    "genomic prediction",
-    "GWAS",
-    "livestock",
-    "cattle",
-    "dairy",
-    "sheep",
-    "pig",
-    "poultry",
-    "goat",
-    "aquaculture genom",
-    "sequencing",
-    "phylogenom",
-    "population genetic"
+    "genomics", "bioinformatics", "animal breeding", "quantitative genetics",
+    "genomic selection", "genomic prediction", "GWAS", "livestock", "cattle",
+    "dairy", "sheep", "pig", "poultry", "goat", "aquaculture genom", "genome assembly", 
+    "sequencing", "pan", "assembly", "population genetic"
   ],
-  "keywords_exclude": [
-    "undergraduate",
-    "bachelor",
-    "high school",
-    "marketing"
+  "keywords_exclude": ["high school", "marketing"],
+  "conditional_exclude": [
+    {"term": "plant",
+     "unless_any": ["animal", "livestock", "cattle", "sheep", "pig", "poultry",
+                    "dairy", "goat", "bovine", "ovine", "porcine", "aquaculture", "fish"]}
   ],
   "feeds": [
-    {
-      "active": true,
-      "label": "Google Alert - livestock",
-      "region": "Global",
-      "country": "Multi",
-      "url": "https://www.google.com/alerts/feeds/10312172697536352025/2790374528554307632",
-      "note": "BEST catch-all. Google Alerts -> Deliver to = RSS feed -> paste URL. Make several."
-    },
-    {
-      "active": true,
-      "label": "EURAXESS",
-      "region": "Europe",
-      "country": "EU",
-      "url": "PASTE_EURAXESS_SEARCH_RSS_URL",
-      "note": "Run your search on euraxess.ec.europa.eu/jobs, copy the RSS link."
-    },
-    {
-      "active": true,
-      "label": "jobs.ac.uk",
-      "region": "Europe",
-      "country": "UK",
-      "url": "PASTE_JOBSACUK_SEARCH_RSS_URL",
-      "note": "Each search page has an RSS icon; copy that feed."
-    },
-    {
-      "active": true,
-      "label": "Agristok-all",
-      "region": "Europe",
-      "country": "Multi",
-      "url": "https://agristok.net/feed/",
-      "note": "WordPress /feed/ = all posts. Verify in a browser."
-    },
-    {
-      "active": true,
-      "label": "Agristok-Italy",
-      "region": "Europe",
-      "country": "Italy",
-      "url": "https://agristok.net/tag/phd-scholarships-italy/feed/",
-      "note": "WordPress tag feed = <archive-url>/feed/."
-    },
-    {
-      "active": false,
-      "label": "Nature Careers",
-      "region": "Global",
-      "country": "Multi",
-      "url": "PASTE_NATURE_SEARCH_RSS_URL",
-      "note": "Nature Careers exposes RSS on search results."
-    }
+    {"active": true, "label": "GA: livestock genomics", "region": "Global", "country": "Multi",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/2790374528554307632",
+     "note": "Query: PhD \"livestock genomics\""},
+    {"active": true, "label": "GA: animal breeding genomics", "region": "Global", "country": "Multi",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/16996908066153248003",
+     "note": "Query: PhD \"animal breeding\" genomics"},
+    {"active": true, "label": "GA: species genomics", "region": "Global", "country": "Multi",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/7684349414709513990",
+     "note": "Query: PhD genomics cattle OR sheep OR dairy OR pig"},
+    {"active": true, "label": "GA: AU/NZ animal genetics", "region": "Australia/NZ", "country": "AU/NZ",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/16996908066153250411",
+     "note": "Query: PhD \"animal genetics\" Australia OR \"New Zealand\""},
+    {"active": true, "label": "GA: bioinformatics livestock", "region": "Global", "country": "Multi",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/18126289464699279616",
+     "note": "Query: PhD bioinformatics livestock OR cattle"},
+    {"active": true, "label": "GA: EURAXESS", "region": "Europe", "country": "EU",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/6262069840572737091",
+     "note": "Query: site:euraxess.ec.europa.eu PhD livestock genomics"},
+    {"active": true, "label": "Agristok-all", "region": "Europe", "country": "Multi",
+     "url": "https://agristok.net/feed/",
+     "note": "All Agristok posts (keyword-filtered)."},
+    {"active": true, "label": "Agristok-Italy", "region": "Europe", "country": "Italy",
+     "url": "https://agristok.net/tag/phd-scholarships-italy/feed/",
+     "note": "Italy PhD scholarship tag feed."}
   ]
 }
