@@ -32,7 +32,7 @@
       "label": "Google Alert - livestock",
       "region": "Global",
       "country": "Multi",
-      "url": "PASTE_YOUR_GOOGLE_ALERT_FEED_URL_HERE",
+      "url": "https://www.google.com/alerts/feeds/10312172697536352025/2790374528554307632",
       "note": "BEST catch-all. Google Alerts -> Deliver to = RSS feed -> paste URL. Make several."
     },
     {
