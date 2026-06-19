@@ -7,9 +7,9 @@
     "buffalo", "ruminant", "aquaculture", "fish", "shrimp", "beef"
   ],
   "keywords_include": [
-    "genomic", "genome", "bioinformatic", "genetic", "breeding", "sequencing",
-    "gwas", "marker", "qtl", "transcriptom", "snp", "phylogenom", "selection",
-    "assembly", "genome assembly", "pangenom", "pan-genom", "hifi", "population genetic"
+    "genomic", "genome", "bioinformatic", "genetic", "ONT","breeding", "sequencing",
+    "gwas", "marker", "qtl", "transcriptom", "variant","snp", "long read","phylogenom", "selection",
+    "assembly", "genome assembly", "pangenom", "pan-genome", "hifi", "population genetic"
   ],
   "keywords_exclude": ["high school", "marketing"],
   "feeds": [
@@ -37,11 +37,10 @@
     {"active": true, "label": "Agristok-Italy", "region": "Europe", "country": "Italy",
      "url": "https://agristok.net/tag/phd-scholarships-italy/feed/",
      "note": "Italy PhD scholarship tag feed."},
-
-    {"active": false, "label": "Spare 1", "region": "", "country": "",
-     "url": "PASTE_FEED_URL_1", "note": "Set active=true once you add a URL."},
-    {"active": false, "label": "Spare 2", "region": "", "country": "",
-     "url": "PASTE_FEED_URL_2", "note": "Set active=true once you add a URL."},
+    {"active": true, "label": "Google Alert - PhD Pangenomics", "region": "Global", "country": "Multi",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/15143297894015506500", "note": "Pangenomics PhD positions"},
+    {"active": true, "label": "ScholarshipDB", "region": "Global", "country": "Multi",
+     "url": "https://www.google.com/alerts/feeds/10312172697536352025/6325346294756204112", "note": "ScholarshipDB"},
     {"active": false, "label": "Spare 3", "region": "", "country": "",
      "url": "PASTE_FEED_URL_3", "note": "Set active=true once you add a URL."},
     {"active": false, "label": "Spare 4", "region": "", "country": "",
