@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """
 build_data.py - runs in GitHub Actions (server-side, so no CORS).
-Reads config.json, fetches every active feed, filters by keywords, dedupes
-against the existing data.json (so the list accumulates over time), and writes
-data.json for index.html to render. Read-only display: personal triage
-(Status/Notes) stays in your local Excel tracker.
+Reads config.json, fetches every active feed, applies the filter rules, dedupes
+against the existing data.json (so the list accumulates), and writes data.json
+for index.html to render.
+
+Filter logic (a listing is KEPT only if ALL pass):
+  1. require_any   : must contain at least one of these (e.g. phd/doctoral)
+  2. exclude       : must contain NONE of these (hard kill)
+  3. conditional_exclude : for each {term, unless_any}, drop if term is present
+                     AND none of unless_any is present (e.g. plant unless animal)
+  4. include       : must contain at least one topical term
 """
 import json, re, socket, datetime as dt, pathlib
 import feedparser
@@ -25,17 +31,28 @@ def norm_title(t):
     return re.sub(r"[^a-z0-9]+", " ", (t or "").lower()).strip()
 
 
-def matches(text, inc, exc):
+def matches(text, inc, req, exc, cond):
     t = text.lower()
+    if req and not any(r in t for r in req):
+        return False
     if any(x in t for x in exc):
         return False
-    return any(k in t for k in inc) if inc else True
+    for rule in cond:
+        term = (rule.get("term") or "").lower()
+        unless = [u.lower() for u in rule.get("unless_any", [])]
+        if term and term in t and not any(u in t for u in unless):
+            return False
+    if inc and not any(k in t for k in inc):
+        return False
+    return True
 
 
 def main():
     cfg = json.loads(CONFIG.read_text())
     inc = [k.lower() for k in cfg.get("keywords_include", [])]
+    req = [k.lower() for k in cfg.get("keywords_require_any", [])]
     exc = [k.lower() for k in cfg.get("keywords_exclude", [])]
+    cond = cfg.get("conditional_exclude", [])
 
     existing = []
     if DATA.exists():
@@ -69,7 +86,7 @@ def main():
             summary = e.get("summary", "") or e.get("description", "")
             if not title or not link:
                 continue
-            if not matches(title + " " + summary, inc, exc):
+            if not matches(title + " " + summary, inc, req, exc, cond):
                 continue
             nl, nt = norm_link(link), norm_title(title)
             if nl in seen_links or (nt and nt in seen_titles):
