@@ -5,7 +5,7 @@
     "genomics", "bioinformatics", "animal breeding", "quantitative genetics",
     "genomic selection", "genomic prediction", "GWAS", "livestock", "cattle",
     "dairy", "sheep", "pig", "poultry", "goat", "aquaculture genom", "genome assembly", 
-    "sequencing", "pan", "assembly", "population genetic"
+    "sequencing", "pan", "assembly", "Hifi", "population genetic"
   ],
   "keywords_exclude": ["high school", "marketing"],
   "conditional_exclude": [
