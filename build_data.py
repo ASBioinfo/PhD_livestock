@@ -4,14 +4,13 @@ build_data.py - runs in GitHub Actions (server-side, so no CORS).
 Reads config.json, fetches active feeds, applies filter rules, dedupes against
 existing data.json (accumulates), writes data.json for index.html.
 
-A listing is KEPT only if ALL pass (matching is case-insensitive):
-  1. require_any : whole-word match of at least one (e.g. phd / doctoral).
-                   Word-boundary => "doctoral" does NOT match "postdoctoral".
-  2. anchor_any  : whole-word match of at least one animal/livestock term.
-                   Word-boundary => "pig" does NOT match "epigenetic".
-  3. exclude     : whole-word match of any => drop.
-  4. include     : substring match of at least one topical/field term
-                   (kept as substring so "genomic" catches "genomics").
+A listing is KEPT only if ALL pass (case-insensitive, whole-word where noted):
+  1. require_any : >=1 whole-word match (phd/doctoral). Word-boundary =>
+                   "doctoral" does NOT match "postdoctoral".
+  2. anchor_any  : >=1 whole-word animal/livestock term. Word-boundary =>
+                   "pig" does NOT match "epigenetic".
+  3. exclude     : any whole-word match => drop.
+  4. include     : >=1 substring field term ("genomic" catches "genomics").
 """
 import json, re, socket, datetime as dt, pathlib
 import feedparser
@@ -33,7 +32,6 @@ def norm_title(t):
 
 
 def has_word(term, text):
-    # whole word, tolerant of a trailing plural 's' (animal/animals, pig/pigs)
     return re.search(r"\b" + re.escape(term) + r"s?\b", text) is not None
 
 
@@ -83,6 +81,7 @@ def main():
             print(f"  ! {f.get('label')}: {e}")
             continue
 
+        hits = 0
         for e in parsed.entries:
             title = (e.get("title") or "").strip()
             link = (e.get("link") or "").strip()
@@ -99,12 +98,14 @@ def main():
                           "country": f.get("country", ""), "source": f.get("label", ""),
                           "title": title, "link": link})
             new_count += 1
+            hits += 1
+        print(f"  + {f.get('label')}: {hits} new (of {len(parsed.entries)} entries)")
 
     items.sort(key=lambda i: i.get("found", ""), reverse=True)
     DATA.write_text(json.dumps(
         {"updated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
          "count": len(items), "items": items}, indent=2, ensure_ascii=False))
-    print(f"{new_count} new ({len(items)} total). Feeds ok={ok} failed={failed}.")
+    print(f"\n{new_count} new ({len(items)} total). Feeds ok={ok} failed={failed}.")
 
 
 if __name__ == "__main__":
