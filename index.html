@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Livestock Genomics Positions</title>
+<style>
+  :root{
+    --bg:#f7f8f7; --card:#ffffff; --ink:#1c2421; --muted:#6b7670;
+    --line:#e4e8e5; --accent:#1f6f54; --accent-soft:#e7f2ec; --new:#c4551f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--ink)}
+  header{padding:28px 20px 14px;max-width:1100px;margin:0 auto}
+  h1{margin:0;font-size:22px;letter-spacing:-.2px}
+  .sub{color:var(--muted);font-size:13px;margin-top:4px}
+  .controls{max-width:1100px;margin:14px auto 0;padding:0 20px;
+            display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  input,select{font:inherit;padding:9px 12px;border:1px solid var(--line);
+               border-radius:9px;background:var(--card);color:var(--ink)}
+  input{flex:1;min-width:200px}
+  .wrap{max-width:1100px;margin:16px auto 60px;padding:0 20px}
+  table{width:100%;border-collapse:collapse;background:var(--card);
+        border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);
+        vertical-align:top;font-size:14px}
+  th{background:#fbfcfb;color:var(--muted);font-weight:600;font-size:12px;
+     letter-spacing:.04em;text-transform:uppercase;cursor:pointer;user-select:none;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#fafbfa}
+  a.title{color:var(--accent);text-decoration:none;font-weight:600}
+  a.title:hover{text-decoration:underline}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;
+        background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+  .new{background:#fbe9e0;color:var(--new);font-weight:700;margin-left:6px}
+  .meta{color:var(--muted);font-size:12px;white-space:nowrap}
+  .empty{padding:40px;text-align:center;color:var(--muted)}
+  @media(max-width:640px){.hide-sm{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Livestock Genomics — Open Positions</h1>
+  <div class="sub" id="status">Loading…</div>
+</header>
+<div class="controls">
+  <input id="q" type="search" placeholder="Search title / source…">
+  <select id="region"><option value="">All regions</option></select>
+  <select id="age">
+    <option value="0">Any time</option>
+    <option value="7">New this week</option>
+    <option value="30">Last 30 days</option>
+  </select>
+</div>
+<div class="wrap">
+  <table>
+    <thead><tr>
+      <th data-k="found">Found</th>
+      <th data-k="region" class="hide-sm">Region</th>
+      <th data-k="country" class="hide-sm">Country</th>
+      <th data-k="title">Position</th>
+      <th data-k="source" class="hide-sm">Source</th>
+    </tr></thead>
+    <tbody id="rows"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+  </table>
+</div>
+<script>
+let ALL=[], sortK="found", sortDir=-1;
+const $=s=>document.querySelector(s);
+const daysAgo=d=>Math.floor((Date.now()-new Date(d))/864e5);
+
+fetch("data.json?_="+Date.now()).then(r=>r.json()).then(d=>{
+  ALL=d.items||[];
+  $("#status").textContent=`${d.count||ALL.length} positions · updated ${d.updated||"—"}`;
+  const regions=[...new Set(ALL.map(i=>i.region).filter(Boolean))].sort();
+  regions.forEach(r=>{const o=document.createElement("option");o.value=o.textContent=r;$("#region").appendChild(o);});
+  render();
+}).catch(()=>{$("#status").textContent="Could not load data.json yet — run the refresh action first.";
+  $("#rows").innerHTML='<tr><td colspan=5 class=empty>No data yet.</td></tr>';});
+
+function render(){
+  const q=$("#q").value.toLowerCase(), reg=$("#region").value, age=+$("#age").value;
+  let rows=ALL.filter(i=>{
+    if(reg && i.region!==reg) return false;
+    if(age && daysAgo(i.found)>age) return false;
+    if(q && !((i.title||"")+" "+(i.source||"")).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  rows.sort((a,b)=>{const x=(a[sortK]||""),y=(b[sortK]||"");return x<y?-sortDir:x>y?sortDir:0;});
+  if(!rows.length){$("#rows").innerHTML='<tr><td colspan=5 class=empty>No matches.</td></tr>';return;}
+  $("#rows").innerHTML=rows.map(i=>{
+    const fresh=daysAgo(i.found)<=7?'<span class="pill new">NEW</span>':'';
+    return `<tr>
+      <td class="meta">${i.found||""}</td>
+      <td class="hide-sm"><span class="pill">${i.region||"—"}</span></td>
+      <td class="hide-sm meta">${i.country||""}</td>
+      <td><a class="title" href="${i.link}" target="_blank" rel="noopener">${esc(i.title)}</a>${fresh}</td>
+      <td class="hide-sm meta">${esc(i.source||"")}</td>
+    </tr>`;}).join("");
+}
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+document.querySelectorAll("th").forEach(th=>th.onclick=()=>{
+  const k=th.dataset.k; sortDir=(k===sortK)?-sortDir:1; sortK=k; render();});
+["#q","#region","#age"].forEach(s=>$(s).addEventListener("input",render));
+</script>
+</body>
+</html>

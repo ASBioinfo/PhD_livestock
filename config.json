@@ -1,0 +1,79 @@
+{
+  "_comment": "This is your control panel. Edit it directly in GitHub (pencil icon) to add feeds or keywords, commit, and the next run picks it up. Set a feed 'active' to false to mute it without deleting.",
+  "keywords_include": [
+    "genomics",
+    "bioinformatics",
+    "animal breeding",
+    "quantitative genetics",
+    "genomic selection",
+    "genomic prediction",
+    "GWAS",
+    "livestock",
+    "cattle",
+    "dairy",
+    "sheep",
+    "pig",
+    "poultry",
+    "goat",
+    "aquaculture genom",
+    "sequencing",
+    "phylogenom",
+    "population genetic"
+  ],
+  "keywords_exclude": [
+    "undergraduate",
+    "bachelor",
+    "high school",
+    "marketing"
+  ],
+  "feeds": [
+    {
+      "active": true,
+      "label": "Google Alert - livestock",
+      "region": "Global",
+      "country": "Multi",
+      "url": "PASTE_YOUR_GOOGLE_ALERT_FEED_URL_HERE",
+      "note": "BEST catch-all. Google Alerts -> Deliver to = RSS feed -> paste URL. Make several."
+    },
+    {
+      "active": true,
+      "label": "EURAXESS",
+      "region": "Europe",
+      "country": "EU",
+      "url": "PASTE_EURAXESS_SEARCH_RSS_URL",
+      "note": "Run your search on euraxess.ec.europa.eu/jobs, copy the RSS link."
+    },
+    {
+      "active": true,
+      "label": "jobs.ac.uk",
+      "region": "Europe",
+      "country": "UK",
+      "url": "PASTE_JOBSACUK_SEARCH_RSS_URL",
+      "note": "Each search page has an RSS icon; copy that feed."
+    },
+    {
+      "active": true,
+      "label": "Agristok-all",
+      "region": "Europe",
+      "country": "Multi",
+      "url": "https://agristok.net/feed/",
+      "note": "WordPress /feed/ = all posts. Verify in a browser."
+    },
+    {
+      "active": true,
+      "label": "Agristok-Italy",
+      "region": "Europe",
+      "country": "Italy",
+      "url": "https://agristok.net/tag/phd-scholarships-italy/feed/",
+      "note": "WordPress tag feed = <archive-url>/feed/."
+    },
+    {
+      "active": false,
+      "label": "Nature Careers",
+      "region": "Global",
+      "country": "Multi",
+      "url": "PASTE_NATURE_SEARCH_RSS_URL",
+      "note": "Nature Careers exposes RSS on search results."
+    }
+  ]
+}
