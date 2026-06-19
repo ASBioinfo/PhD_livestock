@@ -1,31 +1,30 @@
 {
-  "_comment": "Filter rules: require_any (must mention PhD/doctoral) + conditional_exclude (drop 'plant' only if no animal term). Edit feeds/keywords here, commit, then Actions -> Run workflow.",
+  "_comment": "Rules: require_any (PhD/doctoral, whole-word) + anchor_any (must name an animal/livestock, whole-word) + include (a field term, substring). Auto-handles plants (plant-only has no animal word) and postdocs ('doctoral' != 'postdoctoral'). Edit here, commit, Actions -> Run workflow.",
   "keywords_require_any": ["phd", "ph.d", "doctoral", "doctorate"],
+  "keywords_anchor_any": [
+    "livestock", "animal", "cattle", "cow", "sheep", "pig", "swine", "poultry",
+    "chicken", "dairy", "goat", "bovine", "ovine", "porcine", "equine", "horse",
+    "buffalo", "ruminant", "aquaculture", "fish", "shrimp", "beef"
+  ],
   "keywords_include": [
-    "genomics", "bioinformatics", "animal breeding", "quantitative genetics",
-    "genomic selection", "genomic prediction", "GWAS", "livestock", "cattle",
-    "dairy", "sheep", "pig", "poultry", "goat", "aquaculture genom", "genome assembly", 
-    "sequencing", "pan", "assembly", "Hifi", "population genetic"
+    "genomic", "genome", "bioinformatic", "genetic", "breeding", "sequencing",
+    "gwas", "marker", "qtl", "transcriptom", "snp", "phylogenom", "selection",
+    "assembly", "genome assembly", "pangenom", "pan-genom", "hifi", "population genetic"
   ],
   "keywords_exclude": ["high school", "marketing"],
-  "conditional_exclude": [
-    {"term": "plant",
-     "unless_any": ["animal", "livestock", "cattle", "sheep", "pig", "poultry",
-                    "dairy", "goat", "bovine", "ovine", "porcine", "aquaculture", "fish"]}
-  ],
   "feeds": [
     {"active": true, "label": "GA: livestock genomics", "region": "Global", "country": "Multi",
      "url": "https://www.google.com/alerts/feeds/10312172697536352025/2790374528554307632",
-     "note": "Query: PhD \"livestock genomics\""},
+     "note": "Query: PhD livestock genomics (drop quotes to widen)"},
     {"active": true, "label": "GA: animal breeding genomics", "region": "Global", "country": "Multi",
      "url": "https://www.google.com/alerts/feeds/10312172697536352025/16996908066153248003",
-     "note": "Query: PhD \"animal breeding\" genomics"},
+     "note": "Query: PhD animal breeding genomics"},
     {"active": true, "label": "GA: species genomics", "region": "Global", "country": "Multi",
      "url": "https://www.google.com/alerts/feeds/10312172697536352025/7684349414709513990",
      "note": "Query: PhD genomics cattle OR sheep OR dairy OR pig"},
     {"active": true, "label": "GA: AU/NZ animal genetics", "region": "Australia/NZ", "country": "AU/NZ",
      "url": "https://www.google.com/alerts/feeds/10312172697536352025/16996908066153250411",
-     "note": "Query: PhD \"animal genetics\" Australia OR \"New Zealand\""},
+     "note": "Query: PhD animal genetics Australia OR New Zealand"},
     {"active": true, "label": "GA: bioinformatics livestock", "region": "Global", "country": "Multi",
      "url": "https://www.google.com/alerts/feeds/10312172697536352025/18126289464699279616",
      "note": "Query: PhD bioinformatics livestock OR cattle"},
@@ -34,9 +33,22 @@
      "note": "Query: site:euraxess.ec.europa.eu PhD livestock genomics"},
     {"active": true, "label": "Agristok-all", "region": "Europe", "country": "Multi",
      "url": "https://agristok.net/feed/",
-     "note": "All Agristok posts (keyword-filtered)."},
+     "note": "All Agristok posts (filter keeps only animal+genomics PhDs)."},
     {"active": true, "label": "Agristok-Italy", "region": "Europe", "country": "Italy",
      "url": "https://agristok.net/tag/phd-scholarships-italy/feed/",
-     "note": "Italy PhD scholarship tag feed."}
+     "note": "Italy PhD scholarship tag feed."},
+
+    {"active": false, "label": "Spare 1", "region": "", "country": "",
+     "url": "PASTE_FEED_URL_1", "note": "Set active=true once you add a URL."},
+    {"active": false, "label": "Spare 2", "region": "", "country": "",
+     "url": "PASTE_FEED_URL_2", "note": "Set active=true once you add a URL."},
+    {"active": false, "label": "Spare 3", "region": "", "country": "",
+     "url": "PASTE_FEED_URL_3", "note": "Set active=true once you add a URL."},
+    {"active": false, "label": "Spare 4", "region": "", "country": "",
+     "url": "PASTE_FEED_URL_4", "note": "Set active=true once you add a URL."},
+    {"active": false, "label": "Spare 5", "region": "", "country": "",
+     "url": "PASTE_FEED_URL_5", "note": "Set active=true once you add a URL."},
+    {"active": false, "label": "Spare 6", "region": "", "country": "",
+     "url": "PASTE_FEED_URL_6", "note": "Set active=true once you add a URL."}
   ]
 }
